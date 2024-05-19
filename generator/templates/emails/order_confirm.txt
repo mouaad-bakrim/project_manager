@@ -1,0 +1,22 @@
+{% load sc_settings_value %}
+Bonjour,
+
+Nous avons bien reçu votre commande que nous allons traîter dans les meilleurs délais. 
+
+Voici un récapitulatif de votre commande:
+- Numéro : {{data.external_id}}
+{% if user.active_accounts|length > 1 %}
+- Compte : {{ data.client }}
+{% endif %}
+- Date de livraison souhaitée : {{data.expected_date}}
+- Référence : {{data.reference_client}}
+
+
+Vous pouvez suivre l'avancement de votre commande en vous connectant au portail Access Self-Care :
+
+{% sc_settings_value "STRIPPED_SITE_URL" %}{% url 'base:dashboard' %}
+
+Cordialement,
+
+L'Equipe Access Self-Care
+Cet email a été envoyé automatiquement, merci de ne pas y répondre.

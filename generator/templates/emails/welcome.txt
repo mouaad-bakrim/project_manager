@@ -1,0 +1,19 @@
+{% load sc_settings_value %}
+Bonjour,
+
+Nous avons le plaisir de vous informer de la création de votre compte sur Access Self-Care.
+
+Ce portail vous permet d'effectuer plusieurs actions depuis n'importe quel appareil: 
+- Passer des commandes 
+- Suivre l'avancement de leur livraison 
+- Imprimer vos dernières factures
+- etc...
+
+Pour définir votre mot de passe et vous connecter au portail Access Self-Care, veuillez copier le clien ci-dessous dans votre navigateur :
+
+{% sc_settings_value "STRIPPED_SITE_URL" %}{% url 'base:password_reset_confirm' uidb64=uid token=token %}
+
+Cordialement,
+
+L'Equipe Access Self-Care
+Cet email a été envoyé automatiquement, merci de ne pas y répondre.

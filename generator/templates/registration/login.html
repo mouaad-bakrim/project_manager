@@ -1,0 +1,156 @@
+{% load static %}
+{% load sc_settings_value %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+	<title>{% sc_settings_value "APPLICATION_NAME" %}</title>
+	<!--begin::Head-->
+	<head><base href="../../../">
+		<meta charset="utf-8" />
+   		<title>{% block title %}{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="apple-touch-icon" sizes="180x180" href="{% get_static_prefix %}{% sc_settings_value 'APP_LOGO_PATH'%}favicons/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="{% get_static_prefix %}{% sc_settings_value 'APP_LOGO_PATH'%}favicons/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="{% get_static_prefix %}{% sc_settings_value 'APP_LOGO_PATH'%}favicons/favicon-16x16.png">
+		<link rel="manifest" href="{% get_static_prefix %}{% sc_settings_value 'APP_LOGO_PATH'%}favicons/site.webmanifest">
+		<link rel="mask-icon" href="{% get_static_prefix %}{% sc_settings_value 'APP_LOGO_PATH'%}favicons/safari-pinned-tab.svg" color="#232b2e">
+		<link rel="shortcut icon" href="{% get_static_prefix %}{% sc_settings_value 'APP_LOGO_PATH'%}favicons/favicon.ico">
+		<meta name="msapplication-TileColor" content="#1b1b4d">
+		<meta name="msapplication-config" content="{% get_static_prefix %}{% sc_settings_value 'APP_LOGO_PATH'%}favicons/browserconfig.xml">
+		<!--begin::Fonts-->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+		<!--end::Fonts-->
+		<!--begin::Global Stylesheets Bundle(used by all pages)-->
+		<link href="{% static 'assets/plugins/global/plugins.bundle.css'%}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'assets/css/style.css'%}" rel="stylesheet" type="text/css" />
+		<!--end::Global Stylesheets Bundle-->
+	</head>
+	<!--end::Head-->
+	<!--begin::Body-->
+	<body id="kt_body" class="bg-dark header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed toolbar-tablet-and-mobile-fixed aside-enabled aside-fixed" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+		<!--begin::Main-->
+		<div class="d-flex flex-column flex-root">
+			<!--begin::Authentication - Sign-in -->
+			<div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed">
+				<!--begin::Content-->
+				<div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+					<!--begin::Logo-->
+					<div href="index.html" class="mb-12">
+						<a href=""  class="mb-10 pt-lg-20">
+							<img alt="Logo" src="{% static 'assets/img/cortex.png'%}" class="h-45px" />
+						</a>
+					</div>
+
+<!--begin::Wrapper-->
+<div class="w-lg-500px bg-white rounded shadow-sm p-10 p-lg-15 mx-auto">
+	<!--begin::Form-->
+	<form class="form w-100" method="post"  novalidate="novalidate" id="kt_sign_in_form" action="{% url 'base:login' %}" spellcheck="false">
+		{% csrf_token %}
+		<!--begin::Heading-->
+		<div class="text-center mb-10">
+			<!--begin::Title-->
+			<h1 class="text-dark mb-3">Bienvenue sur {% sc_settings_value "APPLICATION_NAME" %}</h1>
+			<!--end::Title-->
+			<div class="text-center control-label">
+			<b>
+				{% if request.path == '/logout/' %}
+					<div class="d-flex align-items-center bg-light-success rounded p-5 mb-7" role="alert" style="width: 100%;"><b>Vous avez été déconnecté.</b></div>
+				{% else %}
+					{% if form.errors %}
+					<div class="d-flex align-items-center bg-light-danger rounded p-5 mb-7" role="alert" style="width: 100%;"><b>Login ou mot de passe erroné.</b></div>
+					{% elif messages %}
+						{% for message in messages %}
+						<div class="d-flex align-items-center bg-light-{{ message.tags }} rounded p-5 mb-7" role="alert" style="width: 100%;"><b>{{ message }}</b></div>
+						{% endfor %}
+					{% else %}
+							{% if newt and next != '/' %}
+								{% if user.is_authenticated %}
+									<div class="d-flex align-items-center bg-light-danger rounded p-5 mb-7" role="alert" style="width: 100%;"><b>Votre compte n'a pas accès à la page demandée.</b></div>
+								{% else %}
+									<div class="d-flex align-items-center bg-light-warning rounded p-5 mb-7" role="alert" style="width: 100%;"><b>Vous devez vous connecter pour voir la page.</b></div>
+								{% endif %}
+							{% endif %}
+					{% endif %}
+				{% endif %}
+			</b>
+			</div>
+		</div>
+		<!--begin::Heading-->
+		<!--begin::Input group-->
+		<div class="fv-row mb-10">
+			<!--begin::Label-->
+			<label class="form-label fs-6 fw-bolder text-dark">Login</label>
+			<!--end::Label-->
+			<!--begin::Input-->
+			<input class="form-control form-control-lg form-control-solid" type="text" name="username" autocomplete="off" autofocus  style="text-transform: lowercase;" />
+			<!--end::Input-->
+		</div>
+		<!--end::Input group-->
+		<!--begin::Input group-->
+		<div class="fv-row mb-10">
+			<!--begin::Wrapper-->
+			<div class="d-flex flex-stack mb-2">
+				<!--begin::Label-->
+				<label class="form-label fw-bolder text-dark fs-6 mb-0">Mot de passe</label>
+				<!--end::Label-->
+				<!--begin::Link-->
+				<a class="link-primary fs-6 fw-bolder">Mot de passe oublié ?</a>
+				<!--end::Link-->
+			</div>
+			<!--end::Wrapper-->
+			<!--begin::Input-->
+			<input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off" />
+			<!--end::Input-->
+		</div>
+		<!--end::Input group-->
+		<!--begin::Actions-->
+		<div class="text-center">
+			<!--begin::Submit button-->
+			<button type="submit" id="kt_sign_in_submit" class="btn btn-lg btn-primary w-100 mb-5">
+				<span class="indicator-label">Valider</span>
+				<span class="indicator-progress">Merci de patienter...
+				<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+			</button>
+			<!--end::Submit button-->
+		</div>
+		<!--end::Actions-->
+
+		{% if next %}
+			<input type="hidden" name="next" value="{{ next }}" />
+				{% else %}
+			<input type="hidden" name="next" value="" />
+		{% endif %}
+	</form>
+	<!--end::Form-->
+</div>
+<!--end::Wrapper-->
+				</div>
+				<!--end::Content-->
+				<!--begin::Footer-->
+				{% comment %} <div class="d-flex flex-center flex-column-auto p-10">
+					<!--begin::Links-->
+					<div class="d-flex align-items-center fw-bold fs-6">
+						<a href="https://keenthemes.com/faqs" class="text-muted text-hover-primary px-2">About</a>
+						<a href="mailto:support@keenthemes.com" class="text-muted text-hover-primary px-2">Contact</a>
+						<a href="https://1.envato.market/EA4JP" class="text-muted text-hover-primary px-2">Contact Us</a>
+					</div>
+					<!--end::Links-->
+				</div> {% endcomment %}
+				<!--end::Footer-->
+			</div>
+			<!--end::Authentication - Sign-in-->
+		</div>
+		<!--end::Main-->
+		<!--begin::Javascript-->
+		<!--begin::Global Javascript Bundle(used by all pages)-->
+		<script src="{% static 'assets/plugins/global/plugins.bundle.js'%}"></script>
+		<script src="{% static 'assets/js/scripts.bundle.js'%}"></script>
+		<!--end::Global Javascript Bundle-->
+		<!--begin::Page Custom Javascript(used by this page)-->
+		{% comment %} <script src="assets/js/custom/authentication/sign-in/general.js"></script> {% endcomment %}
+		<!--end::Page Custom Javascript-->
+		<!--end::Javascript-->
+	</body>
+	<!--end::Body-->
+</html>

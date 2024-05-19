@@ -1,0 +1,125 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% block title %}Bienvenue sur {% endblock %}
+
+
+{% block css %} 
+{% endblock css %}
+
+{% block toolbar %}
+    <!--begin::Page title-->
+    <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+        
+        <!--begin::Title-->
+        <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Bienvenue sur Access Self-Care</h1>
+        <!--end::Title-->
+        <!--begin::Separator-->
+        <span class="h-20px border-gray-200 border-start mx-4"></span>
+        <!--end::Separator-->
+        <!--begin::Breadcrumb-->
+        <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+
+        </ul>
+        <!--end::Breadcrumb-->	          
+    </div>					
+{% endblock %}
+
+{% block content %}
+{% if messages %}
+    <div class="card mb-5 mb-xl-10">
+        <div class="card-body pt-9 pb-0">
+            <!--begin::Details-->
+            <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
+                    {% for message in messages %}
+                        <div {% if message.tags %} class="d-flex align-items-center bg-light-{{ message.tags }} rounded p-5 mb-7"{% endif %}  role="alert" style="width: 100%;"><b>{{ message }}</b></div>
+                    {% endfor %}
+            </div>
+            <!--end::Details-->
+        </div>
+    </div>
+{% endif %}
+<div class="row gy-5 g-xl-8">
+    {% with comptes=user.active_accounts %}
+    {% for client in liste_clients %}
+        <div class="col-xl-6">
+
+            <div class="card card-xl-stretch mb-xl-8">
+                <!--begin::Body-->
+                <div class="card-body p-0">
+
+                    <!--begin::Header-->
+                    <div class="px-9 pt-7 card-rounded h-275px w-100 "
+
+                        >
+
+                        <div class="card-rounded-bottom" data-kt-color="info" style="height: 200px">
+                            <img class="fit-picture"
+                                style="max-width:100%; max-height:100%; vertical-align: top;
+                                        text-align: center;display: block; margin-left: auto; margin-right: auto;"
+                                src="{% static 'assets/media/img/image.png' %}"
+                                alt="{{client.name}}">
+                        </div>
+
+
+                    </div>
+                    <!--end::Header-->
+
+                    <!--begin::Items-->
+                    <div class="shadow-xs card-rounded mx-9 mb-9 px-6 py-9 position-relative z-index-1 bg-white" style="margin-top: -50px">
+                        <!--begin::Item-->
+                        <div class="d-flex align-items-center mb-6">
+                            <h3 class="card-title fw-bolder text-dark">{{client.name}}</h3>
+                        </div>
+                        <!--end::Item-->
+                        <div class="row g-0" id="message_{{client.id}}">
+                        </div>
+
+
+                        <div class="pt-5">
+                            {% comment %} <p class="text-center fs-6 pb-5">
+                            <span class="badge badge-light-danger fs-8">Notes:</span>&nbsp; Current sprint requires stakeholders
+                            <br>to approve newly amended policies</p> {% endcomment %}
+                            <a href="{% url 'order:Add_Commande' client_id=client.pk %}" class="btn btn-primary w-100 py-3">Nouvelle commande</a>
+                        </div>
+                    </div>
+                    <!--end::Items-->
+                </div>
+                <!--end::Body-->
+            </div>
+            <!--end::List Widget 1-->
+        </div>
+   {% endfor %}
+    {% endwith %}
+</div>
+
+{% endblock content %}
+
+
+
+{% block javascript %}
+<script>
+
+function getState(cid){
+    var url = "".replace("999999999999" , cid);
+    $.ajax({
+        url: url,
+        data: {
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.is_ok) {
+                $("#message_" + cid).html(data.html);
+            }
+        }
+    });
+}
+
+{% for c in user.active_accounts %}
+    {% if c.can_view_commade_list %}
+      getState({{c.id}});
+    {% endif %}
+{% endfor %}
+</script>
+
+{% endblock javascript%}

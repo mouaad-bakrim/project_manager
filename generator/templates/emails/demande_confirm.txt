@@ -1,0 +1,11 @@
+{% load sc_settings_value %}
+Bonjour,
+
+Nous avons bien reçu votre demande. Son numéro est {{data.external_id}}.
+
+Nous la traiterons dans les meilleurs délais.
+
+Cordialement,
+
+L'Equipe Access Self-Care
+Cet email a été envoyé automatiquement, merci de ne pas y répondre.
